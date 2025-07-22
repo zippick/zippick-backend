@@ -28,6 +28,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+        working-directory: zippick
+
       - name: Build app
         run: ./gradlew clean build -x test
         working-directory: zippick
