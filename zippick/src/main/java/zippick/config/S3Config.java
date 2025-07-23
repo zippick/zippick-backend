@@ -21,7 +21,7 @@ public class S3Config {
   public S3Client s3Client() {
     return S3Client.builder()
         .region(Region.AP_NORTHEAST_2)
-        .credentialsProvider(ProfileCredentialsProvider.create("zippick")) // 중요!!
+        .credentialsProvider(ProfileCredentialsProvider.create("zippick"))
         .build();
   }*/
 
