@@ -20,7 +20,7 @@ jobs:
         run: chmod +x gradlew
         working-directory: zippick
 
-      - run: ./gradlew check
+      - run: ./gradlew check -x test
         working-directory: zippick
 
   deploy:

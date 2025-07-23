@@ -1,4 +1,3 @@
-/*
 package zippick;
 
 import org.junit.jupiter.api.Test;
@@ -43,4 +42,3 @@ public class S3UploadTest {
   }
 
 }
-*/
