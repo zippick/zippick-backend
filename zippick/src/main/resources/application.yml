@@ -6,9 +6,9 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
 
 
-#  autoconfigure:
-#    exclude:
-#      - io.awspring.cloud.autoconfigure.s3.S3AutoConfiguration
+  autoconfigure:
+    exclude:
+      - io.awspring.cloud.autoconfigure.s3.S3AutoConfiguration
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml
