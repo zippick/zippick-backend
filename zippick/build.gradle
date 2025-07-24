@@ -4,7 +4,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'zippick'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -28,13 +27,14 @@ dependencies {
 	// spring boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 
 	// oci
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+	implementation 'com.oracle.database.jdbc:ojdbc8:21.18.0.0'
 	implementation 'com.oracle.database.security:oraclepki:21.18.0.0'
 	implementation 'com.oracle.database.security:osdt_cert:21.18.0.0'
 	implementation 'com.oracle.database.security:osdt_core:21.18.0.0'
@@ -48,6 +48,7 @@ dependencies {
 
 	// aws
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.0.1'
 	implementation 'software.amazon.awssdk:s3:2.25.26'
 
 	// test

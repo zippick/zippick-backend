@@ -5,18 +5,24 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
 
-  mybatis:
-    mapper-locations: classpath:/mapper/**/*.xml
-    configuration:
-      map-underscore-to-camel-case: true
+
+#  autoconfigure:
+#    exclude:
+#      - io.awspring.cloud.autoconfigure.s3.S3AutoConfiguration
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 # aws
 cloud:
   aws:
     region:
       static: ap-northeast-2
-    stack:
-      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
 
 # swagger
 springdoc:
