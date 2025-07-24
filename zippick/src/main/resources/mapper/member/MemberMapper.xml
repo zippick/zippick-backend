@@ -3,12 +3,14 @@
 <mapper namespace="zippick.member.mapper.MemberMapper" >
     <insert id="insertMember">
         INSERT INTO member (
-            id, login_id, password, name, zipcode, basic_address, detail_address, created_by
+        id, login_id, password, name, zipcode, basic_address, detail_address, created_by
         )
-        VALUES (SEQ_USERS.NEXTVAL, #{loginId}, #{password}, #{name},
-                #{zipcode}, #{basicAddress},  #{detailAddress}, #{createdBy}
-               )
+        VALUES (
+        SEQ_USERS.NEXTVAL, #{loginId}, #{password},
+        #{name}, #{zipcode}, #{basicAddress}, #{detailAddress}, SEQ_USERS.CURRVAL
+        )
     </insert>
+
 
     <select id="getDuplicateMember" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM member WHERE login_id = #{loginId}
