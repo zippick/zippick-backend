@@ -15,4 +15,10 @@
     <select id="getDuplicateMember" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM member WHERE login_id = #{loginId}
     </select>
+    <select id="findById" resultType="zippick.domain.member.dto.MemberDTO" parameterType="long">
+        SELECT ID, LOGIN_ID, PASSWORD, NAME
+        FROM MEMBER
+        WHERE ID = #{id}
+    </select>
+
 </mapper>

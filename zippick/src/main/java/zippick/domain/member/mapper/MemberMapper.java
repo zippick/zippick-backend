@@ -2,10 +2,12 @@ package zippick.domain.member.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import zippick.member.dto.request.SignUpRequest;
+import zippick.domain.member.dto.MemberDTO;
+import zippick.domain.member.dto.request.SignUpRequest;
 
 @Mapper
 public interface MemberMapper {
     int getDuplicateMember(@Param("loginId")String loginId);
     void insertMember(SignUpRequest signUpRequest);
+    MemberDTO findById(@Param("id") Long id);
 }
