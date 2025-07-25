@@ -13,7 +13,7 @@ import zippick.member.service.MemberService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;

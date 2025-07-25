@@ -58,6 +58,9 @@ dependencies {
 
 	// replicate
 	implementation 'org.json:json:20240303'
+
+	//auth
+	implementation 'org.springframework.security:spring-security-crypto'
 }
 
 
