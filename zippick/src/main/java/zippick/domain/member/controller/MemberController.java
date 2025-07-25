@@ -1,4 +1,4 @@
-package zippick.member.controller;
+package zippick.domain.member.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zippick.member.dto.request.SignUpRequest;
-import zippick.member.service.MemberService;
+import zippick.domain.member.dto.request.SignUpRequest;
+import zippick.domain.member.service.MemberService;
 
 @RestController
 @RequiredArgsConstructor
