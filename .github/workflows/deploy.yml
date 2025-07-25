@@ -70,7 +70,7 @@ jobs:
               -e DB_USER=${{ secrets.DB_USER }} \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e TNS_ADMIN=${{ secrets.TNS_ADMIN }} \
-              -e SWAGGER_URL=${{ secrets.SWAGGER_URL }} \
-              -e SWAGGER_DOCS_URL=${{ secrets.SWAGGER_DOCS_URL }} \
+              -e BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
+              -e REPLICATE_SECRET=${{ secrets.REPLICATE_SECRET }} \
               -v /home/ec2-user/wallet_zippick:/wallet_zippick:ro \
               ghcr.io/${{ github.repository }}/spring-backend:latest
