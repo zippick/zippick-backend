@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import zippick.domain.auth.dto.AuthTokenDTO;
 import zippick.domain.auth.mapper.AuthMapper;
+import zippick.global.exception.ErrorCode;
+import zippick.global.exception.ZippickException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -50,18 +52,17 @@ public class AuthTokenFilter implements Filter {
         String authHeader = httpRequest.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT, "유효하지 않은 토큰");
         }
 
         String token = authHeader.replace("Bearer", "").trim();
         AuthTokenDTO tokenInfo = authMapper.getToken(token);
 
         if (tokenInfo == null || tokenInfo.getExpiredAt().isBefore(LocalDateTime.now())) {
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            throw new ZippickException(ErrorCode.EXPIRED_TOKEN, "만료된 토큰");
         }
 
+        httpRequest.setAttribute("memberId", tokenInfo.getMemberId());
         chain.doFilter(request, response);
     }
 }
