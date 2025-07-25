@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zippick.domain.order.mapper.OrderMapper" >
+
+  <insert id="insertOrder">
+    INSERT INTO ORDERS (ID, MERCHANT_ORDER_ID, STATUS, TOTAL_PRICE, COUNT,
+                        CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, USER_ID, PRODUCT_ID)
+    VALUES (
+              SEQ_ORDERS.NEXTVAL, #{merchantOrderId}, #{status}, #{totalPrice}, #{count},
+              SYSDATE, #{userId}, null, null, #{userId}, #{productId}
+           )
+  </insert>
+
+</mapper>
