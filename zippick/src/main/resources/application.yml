@@ -10,11 +10,11 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      bucket: zippick-products
+      bucket: ${BUCKET_NAME}
 
 replicate:
   api:
-    token: ${replicate_secret}
+    token: ${REPLICATE_SECRET}
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*.xml

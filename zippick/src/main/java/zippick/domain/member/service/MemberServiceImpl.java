@@ -1,9 +1,9 @@
-package zippick.member.service;
+package zippick.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import zippick.member.dto.request.SignUpRequest;
-import zippick.member.mapper.MemberMapper;
+import zippick.domain.member.dto.request.SignUpRequest;
+import zippick.domain.member.mapper.MemberMapper;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

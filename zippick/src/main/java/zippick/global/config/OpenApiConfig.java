@@ -12,7 +12,7 @@ public class OpenApiConfig {
   @Bean
   public OpenAPI customOpenAPI() {
     Server server = new Server();
-//    server.setUrl("https://zippick.n-e.kr"); // Swagger 내부 서버 주소 고정
+    //server.setUrl("https://zippick.n-e.kr");
     server.setUrl("http://localhost:8080");
     server.setDescription("Production");
 
