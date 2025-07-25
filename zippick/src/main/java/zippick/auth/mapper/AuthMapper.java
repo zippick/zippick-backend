@@ -9,4 +9,6 @@ public interface AuthMapper {
     MemberDTO getMemberById(String loginId);
     void insertToken(AuthTokenDTO token);
     void deleteToken(String token);
+    AuthTokenDTO getToken(String token);
+
 }

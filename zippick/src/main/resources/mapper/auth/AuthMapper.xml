@@ -17,4 +17,10 @@
         DELETE FROM AUTH_TOKEN
         WHERE token = #{token}
     </delete>
+
+    <select id="getToken" resultType="zippick.auth.dto.AuthTokenDTO">
+        SELECT token, expired_at, member_id
+        FROM AUTH_TOKEN
+        WHERE token = #{token}
+    </select>
 </mapper>
