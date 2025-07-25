@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zippick.domain.order.Service.OrderService;
-import zippick.domain.order.dto.InsertOrderRequest;
+import zippick.domain.order.dto.request.InsertOrderRequest;
 
 @RestController
 @RequiredArgsConstructor

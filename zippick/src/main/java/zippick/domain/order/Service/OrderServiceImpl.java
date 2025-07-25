@@ -3,8 +3,8 @@ package zippick.domain.order.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import zippick.domain.order.dto.InsertOrderDto;
-import zippick.domain.order.dto.InsertOrderRequest;
+import zippick.domain.order.dto.InsertOrderDTO;
+import zippick.domain.order.dto.request.InsertOrderRequest;
 import zippick.domain.order.mapper.OrderMapper;
 
 @Service
@@ -16,7 +16,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertOrder(InsertOrderRequest insertOrderRequest) {
 
-        InsertOrderDto dto = InsertOrderDto.builder()
+        InsertOrderDTO dto = InsertOrderDTO.builder()
                         .status("ORDERED")
                         .totalPrice(insertOrderRequest.getTotalPrice())
                         .count(insertOrderRequest.getCount())

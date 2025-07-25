@@ -1,16 +1,16 @@
 package zippick.domain.order.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InsertOrderRequest {
-    /*
-    * 총합가격, 수량, 가맹점 결제 식별번호, 회원번호, 상품번호
-    * */
+public class InsertOrderDTO {
+    private String status; // FIXME: enum?
     private int totalPrice;
     private int count;
     private String merchantOrderId;

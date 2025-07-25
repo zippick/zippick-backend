@@ -1,9 +1,9 @@
 package zippick.domain.order.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import zippick.domain.order.dto.InsertOrderDto;
+import zippick.domain.order.dto.InsertOrderDTO;
 
 @Mapper
 public interface OrderMapper {
-    void insertOrder(InsertOrderDto dto);
+    void insertOrder(InsertOrderDTO dto);
 }
