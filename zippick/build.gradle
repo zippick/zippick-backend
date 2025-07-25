@@ -27,6 +27,7 @@ dependencies {
 	// spring boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
@@ -57,7 +58,11 @@ dependencies {
 
 	// replicate
 	implementation 'org.json:json:20240303'
+
+	//auth
+	implementation 'org.springframework.security:spring-security-crypto'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
