@@ -13,6 +13,7 @@ public class OpenApiConfig {
   public OpenAPI customOpenAPI() {
     Server server = new Server();
 //    server.setUrl("https://zippick.n-e.kr"); // Swagger 내부 서버 주소 고정
+    server.setUrl("http://localhost:8080");
     server.setDescription("Production");
 
     return new OpenAPI().servers(List.of(server));
