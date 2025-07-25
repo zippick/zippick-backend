@@ -2,7 +2,7 @@ package zippick.domain.member.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import zippick.domain.member.dto.request.SignUpRequest;
+import zippick.member.dto.request.SignUpRequest;
 
 @Mapper
 public interface MemberMapper {

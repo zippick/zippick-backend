@@ -1,4 +1,4 @@
-package zippick.domain.member.dto.request;
+package zippick.member.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

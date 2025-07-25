@@ -8,18 +8,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zippick.domain.member.dto.request.SignUpRequest;
 import zippick.domain.member.service.MemberService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest request){
+    public ResponseEntity<Void> signUp(@Valid @RequestBody zippick.member.dto.request.SignUpRequest request ) {
         memberService.registerMember(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
