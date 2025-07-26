@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import zippick.domain.member.dto.request.SignUpRequest;
 import zippick.domain.member.dto.response.MyInfoResponse;
 import zippick.domain.member.service.MemberService;
+import zippick.domain.order.dto.response.OrderHistoryResponse;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +31,12 @@ public class MemberController {
         Long memberId = (Long) request.getAttribute("memberId");
         MyInfoResponse myInfo = memberService.getMyInfo(memberId);
         return ResponseEntity.ok(myInfo);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderHistoryResponse>> getOrders(HttpServletRequest request) {
+        Long memberId = (Long) request.getAttribute("memberId");
+        List<OrderHistoryResponse> orderHistories = memberService.getOrderHistories(memberId);
+        return ResponseEntity.ok(orderHistories);
     }
 }
