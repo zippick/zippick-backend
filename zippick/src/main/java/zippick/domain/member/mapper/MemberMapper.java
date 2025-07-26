@@ -7,7 +7,7 @@ import zippick.domain.member.dto.request.SignUpRequest;
 
 @Mapper
 public interface MemberMapper {
-    int getDuplicateMember(@Param("loginId")String loginId);
+    boolean isDuplicateLoginId(@Param("loginId")String loginId);
     void insertMember(SignUpRequest signUpRequest);
     MemberDTO findById(@Param("id") Long id);
 }

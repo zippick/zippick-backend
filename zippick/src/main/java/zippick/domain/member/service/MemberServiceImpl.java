@@ -26,10 +26,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void registerMember(SignUpRequest request) {
-        if (memberMapper.getDuplicateMember(request.getLoginId()) > 0) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
-        }
-
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         memberMapper.insertMember(request);
     }
@@ -47,5 +43,10 @@ public class MemberServiceImpl implements MemberService {
             throw new ZippickException(ErrorCode.NO_ORDER_HISTORY, "주문 내역 없음");
         }
         return ret;
+    }
+
+    @Override
+    public boolean isEmailDuplicated(String email) {
+        return memberMapper.isDuplicateLoginId(email);
     }
 }

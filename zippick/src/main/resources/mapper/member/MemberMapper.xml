@@ -11,14 +11,18 @@
         )
     </insert>
 
-
-    <select id="getDuplicateMember" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM member WHERE login_id = #{loginId}
+    <select id="isDuplicateLoginId" resultType="boolean">
+        SELECT CASE
+        WHEN EXISTS ( SELECT 1 FROM member WHERE login_id = #{loginId})
+        THEN 1
+        ELSE 0
+        END AS result
+        FROM dual
     </select>
+
     <select id="findById" resultType="zippick.domain.member.dto.MemberDTO" parameterType="long">
         SELECT ID, LOGIN_ID, PASSWORD, NAME
         FROM MEMBER
         WHERE ID = #{id}
     </select>
-
 </mapper>
