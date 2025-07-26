@@ -27,6 +27,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ProductResponse> getProducts(
             @RequestParam(value = "keyword",  required = false) String keyword,
+            @RequestParam(value = "category",  required = false) String category,
             @RequestParam(value = "min_price",  required = false) Long min_price,
             @RequestParam(value = "max_price",  required = false) Long max_price,
             @RequestParam(value = "width",  required = false) Long width,
@@ -48,13 +49,13 @@ public class ProductController {
 
         else if (width != null || depth != null || height != null) {
             // 사이즈 기반 필터링
-            response = productService.getProductsBySize(width, depth, height, sort, offset);
+            response = productService.getProductsBySize(category, width, depth, height, sort, offset);
         }
 
-         return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/ai-compose", consumes = "multipart/form-data")
+    @PostMapping(value = "/ai-layout", consumes = "multipart/form-data")
     public ResponseEntity<AiComposeResponse> composeImage(
             @Parameter(description = "방 이미지 파일", required = true, schema = @Schema(type = "string", format = "binary"))
             @RequestPart("roomImage") MultipartFile roomImage,
