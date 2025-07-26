@@ -14,14 +14,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public void insertOrder(InsertOrderRequest insertOrderRequest) {
+    public void insertOrder(InsertOrderRequest insertOrderRequest, Long memberId) {
 
         InsertOrderDTO dto = InsertOrderDTO.builder()
                         .status("ORDERED")
                         .totalPrice(insertOrderRequest.getTotalPrice())
                         .count(insertOrderRequest.getCount())
                         .merchantOrderId(insertOrderRequest.getMerchantOrderId())
-                        .userId(insertOrderRequest.getUserId())
+                        .memberId(memberId)
                         .productId(insertOrderRequest.getProductId())
                         .build();
 

@@ -14,6 +14,6 @@ public class InsertOrderDTO {
     private int totalPrice;
     private int count;
     private String merchantOrderId;
-    private Long userId;
+    private Long memberId;
     private Long productId;
 }
