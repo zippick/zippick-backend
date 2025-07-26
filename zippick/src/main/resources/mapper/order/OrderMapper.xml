@@ -4,10 +4,10 @@
 
   <insert id="insertOrder">
     INSERT INTO ORDERS (ID, MERCHANT_ORDER_ID, STATUS, TOTAL_PRICE, COUNT,
-                        CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, USER_ID, PRODUCT_ID)
+                        CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, MEMBER_ID, PRODUCT_ID)
     VALUES (
               SEQ_ORDERS.NEXTVAL, #{merchantOrderId}, #{status}, #{totalPrice}, #{count},
-              SYSDATE, #{userId}, null, null, #{userId}, #{productId}
+              SYSDATE, #{memberId}, null, null, #{memberId}, #{productId}
            )
   </insert>
     <select id="getOrderHistoriesByMemberId" resultType="zippick.domain.order.dto.response.OrderHistoryResponse">
@@ -27,7 +27,7 @@
                      FROM product_image
                  ) WHERE rn = 1
         ) pi ON pi.product_id = p.id
-        WHERE o.user_id = #{memberId}
+        WHERE o.MEMBER_ID = #{memberId}
         ORDER BY o.created_at DESC
     </select>
 </mapper>
