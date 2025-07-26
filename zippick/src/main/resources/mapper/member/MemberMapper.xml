@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zippick.domain.member.mapper.MemberMapper" >
+    <insert id="insertMember">
+        INSERT INTO member (
+        id, login_id, password, name, zipcode, basic_address, detail_address, created_by
+        )
+        VALUES (
+        SEQ_USERS.NEXTVAL, #{loginId}, #{password},
+        #{name}, #{zipcode}, #{basicAddress}, #{detailAddress}, SEQ_USERS.CURRVAL
+        )
+    </insert>
+
+    <select id="isDuplicateLoginId" resultType="boolean">
+        SELECT CASE
+        WHEN EXISTS ( SELECT 1 FROM member WHERE login_id = #{loginId})
+        THEN 1
+        ELSE 0
+        END AS result
+        FROM dual
+    </select>
+
+    <select id="findById" resultType="zippick.domain.member.dto.MemberDTO" parameterType="long">
+        SELECT ID, LOGIN_ID, PASSWORD, NAME
+        FROM MEMBER
+        WHERE ID = #{id}
+    </select>
+</mapper>

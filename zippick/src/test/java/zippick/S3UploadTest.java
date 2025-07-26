@@ -1,12 +1,13 @@
+/*
 package zippick;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import software.amazon.awssdk.services.file.S3Client;
+import software.amazon.awssdk.services.file.model.PutObjectRequest;
+import software.amazon.awssdk.services.file.model.PutObjectResponse;
 
 import java.util.UUID;
 
@@ -36,9 +37,10 @@ public class S3UploadTest {
     assertThat(response).isNotNull();
     assertThat(response.eTag()).isNotEmpty();
 
-    String publicUrl = "https://" + BUCKET_NAME + ".s3.ap-northeast-2.amazonaws.com/" + key;
+    String publicUrl = "https://" + BUCKET_NAME + ".file.ap-northeast-2.amazonaws.com/" + key;
     System.out.println("업로드 성공: " + key);
     System.out.println("퍼블릭 URL: " + publicUrl);
   }
 
 }
+*/

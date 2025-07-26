@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zippick.domain.order.mapper.OrderMapper" >
+
+  <insert id="insertOrder">
+    INSERT INTO ORDERS (ID, MERCHANT_ORDER_ID, STATUS, TOTAL_PRICE, COUNT,
+                        CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, MEMBER_ID, PRODUCT_ID)
+    VALUES (
+              SEQ_ORDERS.NEXTVAL, #{merchantOrderId}, #{status}, #{totalPrice}, #{count},
+              SYSDATE, #{memberId}, null, null, #{memberId}, #{productId}
+           )
+  </insert>
+    <select id="getOrderHistoriesByMemberId" resultType="zippick.domain.order.dto.response.OrderHistoryResponse">
+        SELECT
+            o.created_at AS createdAt,
+            o.merchant_order_id AS merchantOrderId,
+            o.status AS status,
+            p.name AS productName,
+            pi.image_url AS productImageUrl
+        FROM orders o
+                 JOIN product p ON o.product_id = p.id
+                 LEFT JOIN (
+            SELECT product_id, image_url
+            FROM (
+                     SELECT product_id, image_url,
+                            ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY image_order ASC) AS rn
+                     FROM product_image
+                 ) WHERE rn = 1
+        ) pi ON pi.product_id = p.id
+        WHERE o.MEMBER_ID = #{memberId}
+        ORDER BY o.created_at DESC
+    </select>
+</mapper>
