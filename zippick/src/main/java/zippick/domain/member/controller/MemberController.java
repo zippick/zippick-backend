@@ -39,4 +39,9 @@ public class MemberController {
         List<OrderHistoryResponse> orderHistories = memberService.getOrderHistories(memberId);
         return ResponseEntity.ok(orderHistories);
     }
+
+    @GetMapping("/check-email")
+    public boolean checkEmail(@RequestParam String email) {
+        return memberService.isEmailDuplicated(email);
+    }
 }

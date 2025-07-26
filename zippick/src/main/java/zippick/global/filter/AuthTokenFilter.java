@@ -25,7 +25,8 @@ public class AuthTokenFilter implements Filter {
     private static final List<String> EXCLUDE_URL_PATTERNS = List.of(
             "/api/auth/login",
             "/api/auth/logout",
-            "/api/members/signup"
+            "/api/members/signup",
+            "/api/members//check-email"
     );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
