@@ -54,12 +54,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductResponse getProductsBySize(Long width, Long depth, Long height, String sort, Long offset) {
+    public ProductResponse getProductsBySize(String category, Long width, Long depth, Long height, String sort, Long offset) {
         try {
             long limit = 4; // 가져올 개수
 
-            List<ProductDto> products = productMapper.findProductsBySize(width, depth, height, sort, offset, limit);
-            long totalCount = productMapper.countProductsBySize(width, depth, height);
+            List<ProductDto> products = productMapper.findProductsBySize(category, width, depth, height, sort, offset, limit);
+            long totalCount = productMapper.countProductsBySize(category, width, depth, height);
 
             return ProductResponse.builder()
                     .products(products)

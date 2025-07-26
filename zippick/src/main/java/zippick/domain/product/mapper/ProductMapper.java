@@ -18,7 +18,9 @@ public interface ProductMapper {
 
     long countProductsByKeyword(@Param("keyword") String keyword);
 
-    List<ProductDto> findProductsBySize(@Param("width") Long width,
+    List<ProductDto> findProductsBySize(
+            @Param("category") String category,
+            @Param("width") Long width,
             @Param("depth") Long depth,
             @Param("height") Long height,
             @Param("sort") String sort,
@@ -26,7 +28,9 @@ public interface ProductMapper {
             @Param("limit") Long limit
     );
 
-    long countProductsBySize(@Param("width") Long width,
+    long countProductsBySize(
+            @Param("category") String category,
+            @Param("width") Long width,
             @Param("depth") Long depth,
             @Param("height") Long height
     );
