@@ -22,5 +22,6 @@ public class InteriorAnalysisResponse {
     public static class PaletteColor {
         private String colorCode;
         private String colorName;
+        private String toneCategory;
     }
 }

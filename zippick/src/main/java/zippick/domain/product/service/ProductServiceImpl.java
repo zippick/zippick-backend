@@ -221,7 +221,12 @@ public class ProductServiceImpl implements ProductService {
             Please analyze the uploaded room image and respond **strictly** in the following JSON format without any explanation:
             
             1. Three matching interior color palettes.
-               - Each palette must include a "code" (hex color) and a "name" in Korean.
+               - Each palette must include:
+                 - "code" (hex color)
+                 - "name" in Korean
+                 - "toneCategory" selected from the list below:
+                   ["화이트/베이지", "그레이", "블루/네이비", "브라운/우드", "블랙"]
+            
             2. Two most suitable style tags from the list below:
                ["내추럴", "모던&시크", "빈티지&레트로", "클래식", "심플&미니멀"]
             
@@ -229,9 +234,9 @@ public class ProductServiceImpl implements ProductService {
             
             {
               "palette": [
-                { "code": "#E4D9C2", "name": "우드 베이지" },
-                { "code": "#B1956C", "name": "딥 샌드" },
-                { "code": "#F5F5F5", "name": "뉴트럴 화이트" }
+                { "code": "#E4D9C2", "name": "우드 베이지", "toneCategory": "브라운/우드" },
+                { "code": "#B1956C", "name": "딥 샌드", "toneCategory": "브라운/우드" },
+                { "code": "#F5F5F5", "name": "뉴트럴 화이트", "toneCategory": "화이트/베이지" }
               ],
               "tags": ["내추럴", "심플&미니멀"]
             }
@@ -314,6 +319,7 @@ public class ProductServiceImpl implements ProductService {
             palette.add(InteriorAnalysisResponse.PaletteColor.builder()
                     .colorCode(colorObj.getString("code"))
                     .colorName(colorObj.getString("name"))
+                    .toneCategory(colorObj.getString("toneCategory"))
                     .build());
         }
 
