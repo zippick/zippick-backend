@@ -2,6 +2,8 @@ package zippick.domain.order.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/save")
-    public ResponseEntity<Void> save(HttpServletRequest request, @Valid @RequestBody InsertOrderRequest dto) {
+    public ResponseEntity<Map<Object, Object>> save(HttpServletRequest request, @Valid @RequestBody InsertOrderRequest dto) {
         Long memberId = (Long) request.getAttribute("memberId");
         orderService.insertOrder(dto, memberId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.emptyMap());
     }
 }
