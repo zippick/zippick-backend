@@ -21,7 +21,7 @@
             <if test="keyword != null and keyword != ''">
                 AND p.name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
             </if>
-            <if test="category != null and category != ''">
+            <if test="category != null and category != '' and category != '전체'">
                 AND p.category = #{category}
             </if>
         </where>
@@ -52,7 +52,7 @@
             <if test="keyword != null and keyword != ''">
                 AND p.name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
             </if>
-            <if test="category != null and category != ''">
+            <if test="category != null and category != '' and category != '전체'">
                 AND p.category = #{category}
             </if>
         </where>
@@ -71,7 +71,7 @@
         ) AS orderCount
         FROM product p
         WHERE 1=1
-        <if test="category != null and category != ''">
+        <if test="category != null and category != '' and category != '전체'">
             AND p.category = #{category}
         </if>
         <if test="width != null">
@@ -104,7 +104,7 @@
         SELECT COUNT(*)
         FROM product p
         WHERE 1=1
-        <if test="category != null and category != ''">
+        <if test="category != null and category != '' and category != '전체'">
             AND p.category = #{category}
         </if>
         <if test="width != null">
@@ -161,7 +161,7 @@
         ) AS orderCount
         FROM product p
         WHERE 1=1
-        <if test="category != null and category != ''">
+        <if test="category != null and category != '' and category != '전체'">
             AND p.category = #{category}
         </if>
         <if test="minPrice != null">
@@ -191,7 +191,7 @@
         SELECT COUNT(*)
         FROM product p
         WHERE 1=1
-        <if test="category != null and category != ''">
+        <if test="category != null and category != '' and category != '전체'">
             AND p.category = #{category}
         </if>
         <if test="minPrice != null">
