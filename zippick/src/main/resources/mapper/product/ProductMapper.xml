@@ -202,5 +202,32 @@
         </if>
     </select>
 
+    <select id="findByCategoryAndTone" resultType="zippick.domain.product.dto.ProductLikedDto">
+        SELECT
+        id,
+        name,
+        price,
+        thumbnail_image_url as imageUrl
+        FROM product
+        WHERE category = #{category}
+        AND color IN
+        <foreach item="tone" collection="toneCategories" open="(" separator="," close=")">
+            #{tone}
+        </foreach>
+    </select>
+
+    <select id="findByCategoryAndTags" resultType="zippick.domain.product.dto.ProductLikedDto">
+        SELECT
+        id,
+        name,
+        price,
+        thumbnail_image_url as imageUrl
+        FROM product
+        WHERE category = #{category}
+        AND style IN
+        <foreach item="tag" collection="tags" open="(" separator="," close=")">
+            #{tag}
+        </foreach>
+    </select>
 
 </mapper>

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.request.AiRecommendRequest;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.ProductDto;
@@ -355,6 +356,15 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "카테고리+가격 조건 상품 검색 실패: " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<ProductLikedDto> recommend(AiRecommendRequest request) {
+        return switch (request.getRecommendType()) {
+            case "COLOR" -> productMapper.findByCategoryAndTone(request.getCategory(), request.getToneCategories());
+            case "STYLE" -> productMapper.findByCategoryAndTags(request.getCategory(), request.getTags());
+            default -> throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT);
+        };
     }
 
 }

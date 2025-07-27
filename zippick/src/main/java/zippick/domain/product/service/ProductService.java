@@ -2,7 +2,9 @@ package zippick.domain.product.service;
 
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
+import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.request.AiRecommendRequest;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductResponse;
@@ -22,4 +24,5 @@ public interface ProductService {
 
     ProductResponse getProductsByCategoryAndPrice(String category, Long minPrice, Long maxPrice, String sort, Long offset);
 
+    List<ProductLikedDto> recommend(AiRecommendRequest request);
 }
