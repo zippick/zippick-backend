@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDetailResponse {
+    private long id;
     private String name;
     private Long price;
     private String mainImageUrl;

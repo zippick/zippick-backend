@@ -114,6 +114,7 @@
 
     <select id="findProductDetailById" resultType="zippick.domain.product.dto.response.ProductDetailResponse">
         SELECT
+            p.id,
             p.name,
             p.price,
             p.THUMBNAIL_IMAGE_URL AS mainImageUrl,
