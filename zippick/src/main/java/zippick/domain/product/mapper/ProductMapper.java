@@ -11,14 +11,19 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
 
-    List<ProductDto> findProductsByKeywordAndSort(
+    List<ProductDto> findProductsByKeywordAndCategoryAndSort(
             @Param("keyword") String keyword,
+            @Param("category") String category,
             @Param("sort") String sort,
             @Param("offset") Long offset,
             @Param("limit") Long limit
     );
 
-    long countProductsByKeyword(@Param("keyword") String keyword);
+    long countProductsByKeywordAndCategory(
+            @Param("keyword") String keyword,
+            @Param("category") String category
+    );
+
 
     List<ProductDto> findProductsBySize(
             @Param("category") String category,
@@ -40,4 +45,20 @@ public interface ProductMapper {
     ProductDetailResponse findProductDetailById(@Param("id") Long id);
 
     List<ProductLikedDto> findProductsByIds(@Param("ids") List<Long> ids);
+
+    List<ProductDto> findProductsByCategoryAndPrice(
+            @Param("category") String category,
+            @Param("minPrice") Long minPrice,
+            @Param("maxPrice") Long maxPrice,
+            @Param("sort") String sort,
+            @Param("offset") Long offset,
+            @Param("limit") Long limit
+    );
+
+    long countProductsByCategoryAndPrice(
+            @Param("category") String category,
+            @Param("minPrice") Long minPrice,
+            @Param("maxPrice") Long maxPrice
+    );
+
 }
