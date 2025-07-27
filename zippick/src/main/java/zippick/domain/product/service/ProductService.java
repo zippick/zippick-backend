@@ -8,7 +8,7 @@ import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductResponse;
 
 public interface ProductService {
-    ProductResponse getProductsByKeyword(String keyword, String sort, Long offset);
+    ProductResponse getProductsByKeyword(String keyword, String category, String sort, Long offset);
 
     ProductResponse getProductsBySize(String category, Long width, Long depth, Long height, String sort, Long offset);
 
@@ -19,4 +19,7 @@ public interface ProductService {
     List<ProductLikedDto> getProductsByIds(List<Long> ids);
 
     InteriorAnalysisResponse analysisInteriorImage(MultipartFile roomImage);
+
+    ProductResponse getProductsByCategoryAndPrice(String category, Long minPrice, Long maxPrice, String sort, Long offset);
+
 }

@@ -41,22 +41,21 @@ public class ProductServiceImpl implements ProductService {
     @Value("${openai.api-key}")
     private String openaiApiKey;
 
-
     @Override
     @Transactional(readOnly = true)
-    public ProductResponse getProductsByKeyword(String keyword, String sort, Long offset) {
+    public ProductResponse getProductsByKeyword(String keyword, String category, String sort, Long offset) {
         try {
-            long limit = 4; // 가져올 개수
+            long limit = 4;
 
-            List<ProductDto> products = productMapper.findProductsByKeywordAndSort(keyword, sort, offset, limit);
-            long totalCount = productMapper.countProductsByKeyword(keyword);
+            List<ProductDto> products = productMapper.findProductsByKeywordAndCategoryAndSort(keyword, category, sort, offset, limit);
+            long totalCount = productMapper.countProductsByKeywordAndCategory(keyword, category);
 
             return ProductResponse.builder()
                     .products(products)
                     .totalCount(totalCount)
                     .build();
         } catch (Exception e) {
-            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "키워드로 상품 검색 실패: "+e.getMessage());
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "키워드+카테고리로 상품 검색 실패: " + e.getMessage());
         }
     }
 
@@ -333,6 +332,29 @@ public class ProductServiceImpl implements ProductService {
                 .palette(palette)
                 .tags(tags)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getProductsByCategoryAndPrice(String category, Long minPrice, Long maxPrice, String sort, Long offset) {
+        try {
+            long limit = 4;
+
+            List<ProductDto> products = productMapper.findProductsByCategoryAndPrice(
+                    category, minPrice, maxPrice, sort, offset, limit
+            );
+
+            long totalCount = productMapper.countProductsByCategoryAndPrice(
+                    category, minPrice, maxPrice
+            );
+
+            return ProductResponse.builder()
+                    .products(products)
+                    .totalCount(totalCount)
+                    .build();
+        } catch (Exception e) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "카테고리+가격 조건 상품 검색 실패: " + e.getMessage());
+        }
     }
 
 }

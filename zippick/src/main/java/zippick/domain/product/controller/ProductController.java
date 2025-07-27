@@ -21,7 +21,10 @@ import zippick.domain.product.dto.response.AiComposeResponse;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductResponse;
+import zippick.domain.product.model.FurnitureCategory;
 import zippick.domain.product.service.ProductService;
+import zippick.global.exception.ErrorCode;
+import zippick.global.exception.ZippickException;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,18 +48,33 @@ public class ProductController {
     ) {
         ProductResponse response = null;
 
-        if (keyword != null){
-            // 키워드 기반 필터링
-            response = productService.getProductsByKeyword(
-                    keyword,
-                    sort,
-                    offset
-            );
+        String koreanCategory = null;
+        if (category != null && !category.isBlank()) {
+            try {
+                koreanCategory = FurnitureCategory.toKorean(category);
+            } catch (IllegalArgumentException e) {
+                throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT, "존재하지 않는 카테고리입니다: " + category);
+            }
         }
 
+        // 키워드 & 카테고리 기반 검색
+        if (keyword != null) {
+            response = productService.getProductsByKeyword(keyword, koreanCategory, sort, offset);
+        }
+
+        // 카테고리 & 가격 범위 기반 검색
+        else if (category != null && (min_price != null || max_price != null)) {
+            response = productService.getProductsByCategoryAndPrice(koreanCategory, min_price, max_price, sort, offset);
+        }
+
+        // 사이즈 기반 검색
         else if (width != null || depth != null || height != null) {
-            // 사이즈 기반 필터링
-            response = productService.getProductsBySize(category, width, depth, height, sort, offset);
+            response = productService.getProductsBySize(koreanCategory, width, depth, height, sort, offset);
+        }
+
+        // 정의되지않은 검색 조건
+        else {
+            throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT, "검색 조건이 없습니다.");
         }
 
         return ResponseEntity.ok(response);

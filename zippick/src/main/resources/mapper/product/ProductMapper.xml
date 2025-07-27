@@ -5,7 +5,7 @@
 
 <mapper namespace="zippick.domain.product.mapper.ProductMapper">
 
-    <select id="findProductsByKeywordAndSort"
+    <select id="findProductsByKeywordAndCategoryAndSort"
             resultType="zippick.domain.product.dto.ProductDto">
         SELECT
         p.id AS id,
@@ -19,7 +19,10 @@
         FROM product p
         <where>
             <if test="keyword != null and keyword != ''">
-                p.name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                AND p.name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND p.category = #{category}
             </if>
         </where>
         <choose>
@@ -42,12 +45,15 @@
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <select id="countProductsByKeyword" resultType="long">
+    <select id="countProductsByKeywordAndCategory" resultType="long">
         SELECT COUNT(*)
-        FROM product
+        FROM product p
         <where>
             <if test="keyword != null and keyword != ''">
-                name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                AND p.name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND p.category = #{category}
             </if>
         </where>
     </select>
@@ -142,5 +148,59 @@
             #{id}
         </foreach>
     </select>
+
+    <select id="findProductsByCategoryAndPrice" resultType="zippick.domain.product.dto.ProductDto">
+        SELECT
+        p.id AS id,
+        p.name AS name,
+        p.price AS price,
+        p.thumbnail_image_url AS imageUrl,
+        p.created_at AS createdAt,
+        (
+        SELECT COUNT(*) FROM orders o WHERE o.product_id = p.id
+        ) AS orderCount
+        FROM product p
+        WHERE 1=1
+        <if test="category != null and category != ''">
+            AND p.category = #{category}
+        </if>
+        <if test="minPrice != null">
+            AND p.price &gt;= #{minPrice}
+        </if>
+        <if test="maxPrice != null">
+            AND p.price &lt;= #{maxPrice}
+        </if>
+        <choose>
+            <when test="sort == 'price_asc'">
+                ORDER BY p.price ASC
+            </when>
+            <when test="sort == 'price_desc'">
+                ORDER BY p.price DESC
+            </when>
+            <when test="sort == 'popular'">
+                ORDER BY orderCount DESC
+            </when>
+            <otherwise>
+                ORDER BY p.created_at DESC
+            </otherwise>
+        </choose>
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="countProductsByCategoryAndPrice" resultType="long">
+        SELECT COUNT(*)
+        FROM product p
+        WHERE 1=1
+        <if test="category != null and category != ''">
+            AND p.category = #{category}
+        </if>
+        <if test="minPrice != null">
+            AND p.price &gt;= #{minPrice}
+        </if>
+        <if test="maxPrice != null">
+            AND p.price &lt;= #{maxPrice}
+        </if>
+    </select>
+
 
 </mapper>
