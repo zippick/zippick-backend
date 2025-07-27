@@ -26,7 +26,8 @@ public class AuthTokenFilter implements Filter {
             "/api/auth/login",
             "/api/auth/logout",
             "/api/members/signup",
-            "/api/members//check-email"
+            "/api/members/check-email",
+            "/api/products/*"
     );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();

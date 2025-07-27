@@ -6,7 +6,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import zippick.domain.product.dto.response.ProductDto;
+import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.response.ProductDetailResponse;
+import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.response.ProductResponse;
 import zippick.domain.product.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -174,6 +176,32 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "AI 합성 실패: "+e.getMessage());
         }
+    }
+
+    @Override
+    public ProductDetailResponse getProductDetailById(Long id) {
+        ProductDetailResponse response = productMapper.findProductDetailById(id);
+        if (response == null) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "해당 상품이 존재하지 않음");
+        }
+        return response;
+    }
+
+    @Override
+    public List<ProductLikedDto> getProductsByIds(List<Long> ids) {
+        // 리스트가 빈 상태로 요청되는 경우
+        if (ids == null || ids.isEmpty()) {
+            throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT, "상품 ID 리스트가 비어 있습니다.");
+        }
+
+        List<ProductLikedDto> products = productMapper.findProductsByIds(ids);
+
+        // 데이터를 찾을 수 없는 경우
+         if (products.isEmpty()) {
+             throw new ZippickException(ErrorCode.LIKED_NOT_FOUND);
+         }
+
+        return products;
     }
 
 }

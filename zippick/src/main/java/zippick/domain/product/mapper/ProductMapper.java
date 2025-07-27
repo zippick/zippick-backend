@@ -2,7 +2,9 @@ package zippick.domain.product.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import zippick.domain.product.dto.response.ProductDto;
+import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.response.ProductDetailResponse;
+import zippick.domain.product.dto.ProductDto;
 
 import java.util.List;
 
@@ -35,4 +37,7 @@ public interface ProductMapper {
             @Param("height") Long height
     );
 
+    ProductDetailResponse findProductDetailById(@Param("id") Long id);
+
+    List<ProductLikedDto> findProductsByIds(@Param("ids") List<Long> ids);
 }

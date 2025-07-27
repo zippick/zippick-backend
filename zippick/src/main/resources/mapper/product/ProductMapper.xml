@@ -6,7 +6,7 @@
 <mapper namespace="zippick.domain.product.mapper.ProductMapper">
 
     <select id="findProductsByKeywordAndSort"
-            resultType="zippick.domain.product.dto.response.ProductDto">
+            resultType="zippick.domain.product.dto.ProductDto">
         SELECT
         p.id AS id,
         p.name AS name,
@@ -52,7 +52,7 @@
         </where>
     </select>
 
-    <select id="findProductsBySize" resultType="zippick.domain.product.dto.response.ProductDto">
+    <select id="findProductsBySize" resultType="zippick.domain.product.dto.ProductDto">
         SELECT
         p.id AS id,
         p.name AS name,
@@ -110,6 +110,37 @@
         <if test="height != null">
             AND p.height &lt;= #{height}
         </if>
+    </select>
+
+    <select id="findProductDetailById" resultType="zippick.domain.product.dto.response.ProductDetailResponse">
+        SELECT
+            p.id,
+            p.name,
+            p.price,
+            p.THUMBNAIL_IMAGE_URL AS mainImageUrl,
+            p.width,
+            p.depth,
+            p.height,
+            p.color,
+            p.style,
+            p.category,
+            i.image_url AS detailImage
+        FROM product p
+                 JOIN product_image i ON p.id = i.product_id
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="findProductsByIds" resultType="zippick.domain.product.dto.ProductLikedDto">
+        SELECT
+        id,
+        name,
+        price,
+        thumbnail_image_url as imageUrl
+        FROM product
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 </mapper>
