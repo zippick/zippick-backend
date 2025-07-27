@@ -2,11 +2,16 @@ package zippick.domain.product.service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import zippick.domain.product.dto.response.ProductDto;
+import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.response.InteriorAnalysisResponse;
+import zippick.domain.product.dto.response.ProductDetailResponse;
+import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.response.ProductResponse;
 import zippick.domain.product.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,22 +38,24 @@ public class ProductServiceImpl implements ProductService {
     @Value("${replicate.api.token}")
     private String replicateApiToken;
 
+    @Value("${openai.api-key}")
+    private String openaiApiKey;
 
     @Override
     @Transactional(readOnly = true)
-    public ProductResponse getProductsByKeyword(String keyword, String sort, Long offset) {
+    public ProductResponse getProductsByKeyword(String keyword, String category, String sort, Long offset) {
         try {
-            long limit = 4; // 가져올 개수
+            long limit = 4;
 
-            List<ProductDto> products = productMapper.findProductsByKeywordAndSort(keyword, sort, offset, limit);
-            long totalCount = productMapper.countProductsByKeyword(keyword);
+            List<ProductDto> products = productMapper.findProductsByKeywordAndCategoryAndSort(keyword, category, sort, offset, limit);
+            long totalCount = productMapper.countProductsByKeywordAndCategory(keyword, category);
 
             return ProductResponse.builder()
                     .products(products)
                     .totalCount(totalCount)
                     .build();
         } catch (Exception e) {
-            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "키워드로 상품 검색 실패: "+e.getMessage());
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "키워드+카테고리로 상품 검색 실패: " + e.getMessage());
         }
     }
 
@@ -173,6 +180,180 @@ public class ProductServiceImpl implements ProductService {
             throw new ZippickException(ErrorCode.FILE_UPLOAD_FAIL, "S3 파일 업로드 실패: " + e.getMessage());
         } catch (Exception e) {
             throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "AI 합성 실패: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public ProductDetailResponse getProductDetailById(Long id) {
+        ProductDetailResponse response = productMapper.findProductDetailById(id);
+        if (response == null) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "해당 상품이 존재하지 않음");
+        }
+        return response;
+    }
+
+    @Override
+    public List<ProductLikedDto> getProductsByIds(List<Long> ids) {
+        // 리스트가 빈 상태로 요청되는 경우
+        if (ids == null || ids.isEmpty()) {
+            throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT, "상품 ID 리스트가 비어 있습니다.");
+        }
+
+        List<ProductLikedDto> products = productMapper.findProductsByIds(ids);
+
+        // 데이터를 찾을 수 없는 경우
+         if (products.isEmpty()) {
+             throw new ZippickException(ErrorCode.LIKED_NOT_FOUND);
+         }
+
+        return products;
+    }
+
+    @Override
+    public InteriorAnalysisResponse analysisInteriorImage(MultipartFile roomImage) {
+        try {
+            // 1. S3에 이미지 업로드
+            String imageUrl = s3Uploader.upload("ai-interior-rooms", roomImage);
+
+            // 2. 프롬프트 구성
+            String prompt = """
+            Please analyze the uploaded room image and respond **strictly** in the following JSON format without any explanation:
+            
+            1. Three matching interior color palettes.
+               - Each palette must include:
+                 - "code" (hex color)
+                 - "name" in Korean
+                 - "toneCategory" selected from the list below:
+                   ["화이트/베이지", "그레이", "블루/네이비", "브라운/우드", "블랙"]
+            
+            2. Two most suitable style tags from the list below:
+               ["내추럴", "모던&시크", "빈티지&레트로", "클래식", "심플&미니멀"]
+            
+            Respond strictly in the following JSON format:
+            
+            {
+              "palette": [
+                { "code": "#E4D9C2", "name": "우드 베이지", "toneCategory": "브라운/우드" },
+                { "code": "#B1956C", "name": "딥 샌드", "toneCategory": "브라운/우드" },
+                { "code": "#F5F5F5", "name": "뉴트럴 화이트", "toneCategory": "화이트/베이지" }
+              ],
+              "tags": ["내추럴", "심플&미니멀"]
+            }
+            
+            Do not include any explanation or additional text.
+            """;
+
+            // 3. HTTP 요청 준비 (Java HttpClient 사용)
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            JSONObject imageNode = new JSONObject();
+            imageNode.put("type", "image_url");
+            JSONObject imageUrlNode = new JSONObject();
+            imageUrlNode.put("url", imageUrl);
+            imageNode.put("image_url", imageUrlNode);
+
+            JSONObject textNode = new JSONObject();
+            textNode.put("type", "text");
+            textNode.put("text", prompt);
+
+            JSONArray contentArray = new JSONArray();
+            contentArray.put(textNode);
+            contentArray.put(imageNode);
+
+            JSONObject message = new JSONObject();
+            message.put("role", "user");
+            message.put("content", contentArray);
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("model", "gpt-4o");
+            requestBody.put("max_tokens", 1000);
+            requestBody.put("messages", new JSONArray().put(message));
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                    .header("Authorization", "Bearer " + openaiApiKey)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            // 4. 응답 처리
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "OpenAI Vision 호출 실패: " + response.body());
+            }
+
+            JSONObject body = new JSONObject(response.body());
+            String content = body.getJSONArray("choices")
+                    .getJSONObject(0)
+                    .getJSONObject("message")
+                    .getString("content");
+
+            System.out.println("GPT 응답 원문:\n" + content);
+
+            // 마크다운 제거
+            String cleanedContent = content
+                    .replaceAll("(?i)```json", "")
+                    .replaceAll("```", "")
+                    .trim();
+
+            return parseGptFormattedResponse(cleanedContent);
+
+        } catch (IOException e) {
+            throw new ZippickException(ErrorCode.FILE_UPLOAD_FAIL, "S3 업로드 실패: " + e.getMessage());
+        } catch (Exception e) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "AI 분석 실패: " + e.getMessage());
+        }
+    }
+
+    private InteriorAnalysisResponse parseGptFormattedResponse(String content) throws JSONException {
+        // content는 이미 JSON 문자열이므로 그대로 파싱
+        JSONObject json = new JSONObject(content);
+
+        List<InteriorAnalysisResponse.PaletteColor> palette = new ArrayList<>();
+        JSONArray paletteArray = json.getJSONArray("palette");
+
+        for (int i = 0; i < paletteArray.length(); i++) {
+            JSONObject colorObj = paletteArray.getJSONObject(i);
+            palette.add(InteriorAnalysisResponse.PaletteColor.builder()
+                    .colorCode(colorObj.getString("code"))
+                    .colorName(colorObj.getString("name"))
+                    .toneCategory(colorObj.getString("toneCategory"))
+                    .build());
+        }
+
+        List<String> tags = new ArrayList<>();
+        JSONArray tagsArray = json.getJSONArray("tags");
+        for (int i = 0; i < tagsArray.length(); i++) {
+            tags.add(tagsArray.getString(i));
+        }
+
+        return InteriorAnalysisResponse.builder()
+                .palette(palette)
+                .tags(tags)
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getProductsByCategoryAndPrice(String category, Long minPrice, Long maxPrice, String sort, Long offset) {
+        try {
+            long limit = 4;
+
+            List<ProductDto> products = productMapper.findProductsByCategoryAndPrice(
+                    category, minPrice, maxPrice, sort, offset, limit
+            );
+
+            long totalCount = productMapper.countProductsByCategoryAndPrice(
+                    category, minPrice, maxPrice
+            );
+
+            return ProductResponse.builder()
+                    .products(products)
+                    .totalCount(totalCount)
+                    .build();
+        } catch (Exception e) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "카테고리+가격 조건 상품 검색 실패: " + e.getMessage());
         }
     }
 
