@@ -61,4 +61,13 @@ public interface ProductMapper {
             @Param("maxPrice") Long maxPrice
     );
 
+    List<ProductLikedDto> findByCategoryAndTone(
+            @Param("category") String category,
+            @Param("toneCategories") List<String> toneCategories
+    );
+
+    List<ProductLikedDto> findByCategoryAndTags(
+            @Param("category")String category,
+            @Param("tags") List<String> tags
+    );
 }

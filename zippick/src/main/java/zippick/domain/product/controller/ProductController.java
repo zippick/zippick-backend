@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.request.AiRecommendRequest;
 import zippick.domain.product.dto.request.LikedRequest;
 import zippick.domain.product.dto.response.AiComposeResponse;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;
@@ -116,4 +117,11 @@ public class ProductController {
         InteriorAnalysisResponse result = productService.analysisInteriorImage(roomImage);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/recommend")
+    public ResponseEntity<List<ProductLikedDto>> recommend(@RequestBody AiRecommendRequest request) {
+        List<ProductLikedDto> result = productService.recommend(request);
+        return ResponseEntity.ok(result);
+    }
+
 }
