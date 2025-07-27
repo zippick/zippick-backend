@@ -74,4 +74,5 @@ jobs:
               -e REPLICATE_SECRET=${{ secrets.REPLICATE_SECRET }} \
               -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
               -v /home/ec2-user/wallet_zippick:/wallet_zippick:ro \
+              -v /home/ec2-user/.aws:/root/.aws:ro \
               ghcr.io/${{ github.repository }}/spring-backend:latest
