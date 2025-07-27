@@ -2,11 +2,14 @@ package zippick.domain.product.service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import zippick.domain.product.dto.ProductLikedDto;
+import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.response.ProductResponse;
@@ -34,6 +37,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Value("${replicate.api.token}")
     private String replicateApiToken;
+
+    @Value("${openai.api-key}")
+    private String openaiApiKey;
 
 
     @Override
@@ -202,6 +208,125 @@ public class ProductServiceImpl implements ProductService {
          }
 
         return products;
+    }
+
+    @Override
+    public InteriorAnalysisResponse analysisInteriorImage(MultipartFile roomImage) {
+        try {
+            // 1. S3에 이미지 업로드
+            String imageUrl = s3Uploader.upload("ai-interior-rooms", roomImage);
+
+            // 2. 프롬프트 구성
+            String prompt = """
+            Please analyze the uploaded room image and respond **strictly** in the following JSON format without any explanation:
+            
+            1. Three matching interior color palettes.
+               - Each palette must include a "code" (hex color) and a "name" in Korean.
+            2. Two most suitable style tags from the list below:
+               ["내추럴", "모던&시크", "빈티지&레트로", "클래식", "심플&미니멀"]
+            
+            Respond strictly in the following JSON format:
+            
+            {
+              "palette": [
+                { "code": "#E4D9C2", "name": "우드 베이지" },
+                { "code": "#B1956C", "name": "딥 샌드" },
+                { "code": "#F5F5F5", "name": "뉴트럴 화이트" }
+              ],
+              "tags": ["내추럴", "심플&미니멀"]
+            }
+            
+            Do not include any explanation or additional text.
+            """;
+
+            // 3. HTTP 요청 준비 (Java HttpClient 사용)
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            JSONObject imageNode = new JSONObject();
+            imageNode.put("type", "image_url");
+            JSONObject imageUrlNode = new JSONObject();
+            imageUrlNode.put("url", imageUrl);
+            imageNode.put("image_url", imageUrlNode);
+
+            JSONObject textNode = new JSONObject();
+            textNode.put("type", "text");
+            textNode.put("text", prompt);
+
+            JSONArray contentArray = new JSONArray();
+            contentArray.put(textNode);
+            contentArray.put(imageNode);
+
+            JSONObject message = new JSONObject();
+            message.put("role", "user");
+            message.put("content", contentArray);
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("model", "gpt-4o");
+            requestBody.put("max_tokens", 1000);
+            requestBody.put("messages", new JSONArray().put(message));
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                    .header("Authorization", "Bearer " + openaiApiKey)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            // 4. 응답 처리
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "OpenAI Vision 호출 실패: " + response.body());
+            }
+
+            JSONObject body = new JSONObject(response.body());
+            String content = body.getJSONArray("choices")
+                    .getJSONObject(0)
+                    .getJSONObject("message")
+                    .getString("content");
+
+            System.out.println("GPT 응답 원문:\n" + content);
+
+            // 마크다운 제거
+            String cleanedContent = content
+                    .replaceAll("(?i)```json", "")
+                    .replaceAll("```", "")
+                    .trim();
+
+            return parseGptFormattedResponse(cleanedContent);
+
+        } catch (IOException e) {
+            throw new ZippickException(ErrorCode.FILE_UPLOAD_FAIL, "S3 업로드 실패: " + e.getMessage());
+        } catch (Exception e) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "AI 분석 실패: " + e.getMessage());
+        }
+    }
+
+    private InteriorAnalysisResponse parseGptFormattedResponse(String content) throws JSONException {
+        // content는 이미 JSON 문자열이므로 그대로 파싱
+        JSONObject json = new JSONObject(content);
+
+        List<InteriorAnalysisResponse.PaletteColor> palette = new ArrayList<>();
+        JSONArray paletteArray = json.getJSONArray("palette");
+
+        for (int i = 0; i < paletteArray.length(); i++) {
+            JSONObject colorObj = paletteArray.getJSONObject(i);
+            palette.add(InteriorAnalysisResponse.PaletteColor.builder()
+                    .colorCode(colorObj.getString("code"))
+                    .colorName(colorObj.getString("name"))
+                    .build());
+        }
+
+        List<String> tags = new ArrayList<>();
+        JSONArray tagsArray = json.getJSONArray("tags");
+        for (int i = 0; i < tagsArray.length(); i++) {
+            tags.add(tagsArray.getString(i));
+        }
+
+        return InteriorAnalysisResponse.builder()
+                .palette(palette)
+                .tags(tags)
+                .build();
     }
 
 }

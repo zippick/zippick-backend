@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.ProductLikedDto;
 import zippick.domain.product.dto.request.LikedRequest;
 import zippick.domain.product.dto.response.AiComposeResponse;
+import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductResponse;
 import zippick.domain.product.service.ProductService;
@@ -90,4 +90,12 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @PostMapping(value = "/ai-interior", consumes = "multipart/form-data")
+    public ResponseEntity<InteriorAnalysisResponse> analysisInteriorImage(
+            @Parameter(description = "방 이미지 파일", required = true, schema = @Schema(type = "string", format = "binary"))
+            @RequestPart("roomImage") MultipartFile roomImage
+    ) {
+        InteriorAnalysisResponse result = productService.analysisInteriorImage(roomImage);
+        return ResponseEntity.ok(result);
+    }
 }
