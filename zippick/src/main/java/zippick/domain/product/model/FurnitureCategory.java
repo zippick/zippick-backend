@@ -10,7 +10,8 @@ public enum FurnitureCategory {
     SOFA("소파"),
     TABLE("식탁"),
     WARDROBE("옷장"),
-    BED("침대");
+    BED("침대"),
+    ALL("전체");
 
     private final String korean;
 
