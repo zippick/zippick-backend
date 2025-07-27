@@ -17,8 +17,8 @@ public class OpenApiConfig {
   public OpenAPI customOpenAPI() {
     // 서버 설정
     Server server = new Server();
-//    server.setUrl("https://zippick.n-e.kr");
-    server.setUrl("http://localhost:8080");
+    server.setUrl("https://zippick.n-e.kr");
+//    server.setUrl("http://localhost:8080");
     server.setDescription("Zippick Server");
 
     // Bearer JWT
