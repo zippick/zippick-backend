@@ -6,7 +6,7 @@
 <mapper namespace="zippick.domain.product.mapper.ProductMapper">
 
     <select id="findProductsByKeywordAndSort"
-            resultType="zippick.domain.product.dto.response.ProductDto">
+            resultType="zippick.domain.product.dto.ProductDto">
         SELECT
         p.id AS id,
         p.name AS name,
@@ -52,7 +52,7 @@
         </where>
     </select>
 
-    <select id="findProductsBySize" resultType="zippick.domain.product.dto.response.ProductDto">
+    <select id="findProductsBySize" resultType="zippick.domain.product.dto.ProductDto">
         SELECT
         p.id AS id,
         p.name AS name,

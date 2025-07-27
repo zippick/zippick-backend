@@ -1,4 +1,4 @@
-package zippick.domain.product.dto.response;
+package zippick.domain.product.dto;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

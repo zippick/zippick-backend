@@ -3,7 +3,7 @@ package zippick.domain.product.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import zippick.domain.product.dto.response.ProductDetailResponse;
-import zippick.domain.product.dto.response.ProductDto;
+import zippick.domain.product.dto.ProductDto;
 
 import java.util.List;
 
