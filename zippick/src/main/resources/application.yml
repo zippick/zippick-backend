@@ -16,6 +16,9 @@ replicate:
   api:
     token: ${REPLICATE_SECRET}
 
+openai:
+  api-key: ${OPENAI_API_KEY}
+
 mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
