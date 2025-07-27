@@ -1,6 +1,7 @@
 package zippick.domain.product.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductResponse;
 
 public interface ProductService {
@@ -10,4 +11,5 @@ public interface ProductService {
 
     String compose(MultipartFile roomImage, String furnitureImageUrl, String category);
 
+    ProductDetailResponse getProductDetailById(Long id);
 }

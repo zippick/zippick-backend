@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import zippick.domain.product.dto.response.ProductDetailResponse;
 import zippick.domain.product.dto.response.ProductDto;
 import zippick.domain.product.dto.response.ProductResponse;
 import zippick.domain.product.mapper.ProductMapper;
@@ -174,6 +175,15 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "AI 합성 실패: "+e.getMessage());
         }
+    }
+
+    @Override
+    public ProductDetailResponse getProductDetailById(Long id) {
+        ProductDetailResponse response = productMapper.findProductDetailById(id);
+        if (response == null) {
+            throw new ZippickException(ErrorCode.INTERNAL_SERVER_ERROR, "해당 상품이 존재하지 않음");
+        }
+        return response;
     }
 
 }
