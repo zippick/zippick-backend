@@ -73,7 +73,8 @@ jobs:
               -e BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
               -e REPLICATE_SECRET=${{ secrets.REPLICATE_SECRET }} \
               -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-              -e FIREBASE_CREDENTIAL_JSON="${{ secrets.FIREBASE_CREDENTIAL_JSON }}" \
+              -e FIREBASE_CREDENTIAL_PATH=${{ secrets.FIREBASE_CREDENTIAL_PATH }} \
+              -v /home/ec2-user/firebase-adminsdk.json:${{ secrets.FIREBASE_CREDENTIAL_PATH }}:ro \
               -v /home/ec2-user/wallet_zippick:/wallet_zippick:ro \
               -v /home/ec2-user/.aws:/root/.aws:ro \
               ghcr.io/${{ github.repository }}/spring-backend:latest
