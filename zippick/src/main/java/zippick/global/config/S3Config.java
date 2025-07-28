@@ -18,13 +18,15 @@ public class S3Config {
   }
 
   // 로컬
-/*  @Bean
+/*
+  @Bean
   public S3Client s3Client() {
     return S3Client.builder()
             .region(Region.AP_NORTHEAST_2)
             .credentialsProvider(ProfileCredentialsProvider.create("zippick"))
             .build();
-  }*/
+  }
+*/
 
 }
 

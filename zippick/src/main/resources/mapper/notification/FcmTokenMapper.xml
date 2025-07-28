@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zippick.domain.notification.mapper.FcmTokenMapper">
+
+    <insert id="insertFcmToken">
+        INSERT INTO fcm_token (
+            id, member_id, fcm_token, created_at
+        ) VALUES (
+                     seq_fcm_token.NEXTVAL,
+                     #{fcmToken.memberId},
+                     #{fcmToken.fcmToken},
+                     SYSTIMESTAMP
+                 )
+    </insert>
+
+    <update id="updateFcmToken">
+        UPDATE fcm_token
+        SET fcm_token = #{fcmToken},
+            updated_at = SYSTIMESTAMP
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="findByMemberId" resultType="zippick.domain.notification.dto.FcmTokenDto">
+        SELECT * FROM fcm_token WHERE member_id = #{memberId}
+    </select>
+</mapper>

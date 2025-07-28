@@ -24,19 +24,23 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final OrderMapper orderMapper;
 
+
     @Override
+    @Transactional
     public void registerMember(SignUpRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         memberMapper.insertMember(request);
     }
 
     @Override
+    @Transactional
     public MyInfoResponse getMyInfo(Long memberId) {
         MemberDTO member = memberMapper.findById(memberId);
         return new MyInfoResponse(member.getName(), member.getLoginId());
     }
 
     @Override
+    @Transactional
     public List<OrderHistoryResponse> getOrderHistories(Long memberId) {
         List<OrderHistoryResponse> ret = orderMapper.getOrderHistoriesByMemberId(memberId);
         if (ret.isEmpty()) {
@@ -46,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public boolean isEmailDuplicated(String email) {
         return memberMapper.isDuplicateLoginId(email);
     }

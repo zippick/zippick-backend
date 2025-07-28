@@ -27,6 +27,7 @@ public class AuthTokenFilter implements Filter {
             "/api/auth/logout",
             "/api/members/signup",
             "/api/members/check-email",
+            "/api/products",
             "/api/products/*"
     );
 
