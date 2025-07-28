@@ -16,5 +16,4 @@ public class SignUpRequest {
     private String zipcode;
     private String basicAddress;
     private String detailAddress;
-    private Long createdBy;
 }
