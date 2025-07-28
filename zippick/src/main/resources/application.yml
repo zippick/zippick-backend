@@ -55,4 +55,4 @@ logging:
     org.mybatis: DEBUG
 
 firebase:
-  credentials: ${FIREBASE_CREDENTIAL_JSON}
+  credentials: ${FIREBASE_CREDENTIAL_PATH}
