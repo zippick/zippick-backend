@@ -9,7 +9,7 @@ public enum FurnitureCategory {
     DESK("책상"),
     SOFA("소파"),
     TABLE("식탁"),
-    WARDROBE("옷장"),
+    CLOSET("옷장"),
     BED("침대"),
     ALL("전체");
 
