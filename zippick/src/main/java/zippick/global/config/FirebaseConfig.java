@@ -7,22 +7,20 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${FIREBASE_CREDENTIAL_JSON}")
-    private String firebaseCredentialJson;
+    @Value("${FIREBASE_CREDENTIAL_PATH}")
+    private String firebaseCredentialPath;
 
     @PostConstruct
     public void initFirebase() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                InputStream serviceAccount =
-                        new ByteArrayInputStream(firebaseCredentialJson.getBytes(StandardCharsets.UTF_8));
+                InputStream serviceAccount = new FileInputStream(firebaseCredentialPath);
 
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
