@@ -53,3 +53,6 @@ logging:
     org.springframework: INFO
     zippick.domain.product.mapper: DEBUG
     org.mybatis: DEBUG
+
+firebase:
+  credentials: ${FIREBASE_CREDENTIAL_JSON}
