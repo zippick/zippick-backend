@@ -9,7 +9,6 @@ import zippick.domain.notification.dto.NotificationDto;
 public interface NotificationMapper {
     void insertNotification(NotificationDto notification);
 
-    List<NotificationDto> findNotificationsByMemberId(@Param("memberId") Long memberId,
-            @Param("offset") int offset);
+    List<NotificationDto> findNotificationsByMemberId(@Param("memberId") Long memberId);
 
 }
