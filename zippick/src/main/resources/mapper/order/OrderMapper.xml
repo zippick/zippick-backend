@@ -37,4 +37,25 @@
       WHERE ID = #{orderId}
     </update>
 
+    <select id="getOrderDetailById" resultType="zippick.domain.order.dto.response.OrderDetailResponse">
+      select
+        M.NAME as MEMBER_NAME
+        , M.BASIC_ADDRESS
+        , M.DETAIL_ADDRESS
+        , P.ID as PRODUCT_ID
+        , PI.IMAGE_URL
+        , P.NAME as PRODUCT_NAME
+        , P.PRICE
+        , O.CREATED_AT
+        , O.ID as ORDER_ID
+        , O.MERCHANT_ORDER_ID
+        , O.COUNT
+        , O.TOTAL_PRICE
+        , O.STATUS
+      from ORDERS O
+      join MEMBER M on O.MEMBER_ID = M.ID
+      join PRODUCT P on O.PRODUCT_ID = P.ID
+      join PRODUCT_IMAGE PI on P.ID = PI.PRODUCT_ID
+      where O.ID = #{orderId}
+    </select>
 </mapper>

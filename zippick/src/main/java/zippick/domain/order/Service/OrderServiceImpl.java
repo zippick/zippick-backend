@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zippick.domain.order.dto.InsertOrderDTO;
 import zippick.domain.order.dto.request.InsertOrderRequest;
+import zippick.domain.order.dto.response.OrderDetailResponse;
 import zippick.domain.order.mapper.OrderMapper;
 
 @Service
@@ -31,5 +32,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancelOrder(Long orderId) {
         orderMapper.updateOrderStatusToCanceled(orderId);
+    }
+
+    @Override
+    public OrderDetailResponse getOrderDetail(Long orderId) {
+        return orderMapper.getOrderDetailById(orderId);
     }
 }
