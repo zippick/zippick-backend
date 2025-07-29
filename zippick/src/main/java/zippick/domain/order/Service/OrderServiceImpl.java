@@ -27,4 +27,9 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.insertOrder(dto);
     }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        orderMapper.updateOrderStatusToCanceled(orderId);
+    }
 }

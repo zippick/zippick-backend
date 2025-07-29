@@ -30,4 +30,11 @@
         WHERE o.MEMBER_ID = #{memberId}
         ORDER BY o.created_at DESC
     </select>
+
+    <update id="updateOrderStatusToCanceled">
+      UPDATE orders
+      SET status = 'CANCELED'
+      WHERE ID = #{orderId}
+    </update>
+
 </mapper>

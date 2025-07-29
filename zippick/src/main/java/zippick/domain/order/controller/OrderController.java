@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,10 @@ public class OrderController {
         Long memberId = (Long) request.getAttribute("memberId");
         orderService.insertOrder(dto, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @PostMapping("/cancle/{orderId}")
+    public ResponseEntity<Void> cancel(HttpServletRequest request, @PathVariable Long orderId) {
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok().build();
     }
 }

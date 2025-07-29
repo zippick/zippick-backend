@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderMapper {
     void insertOrder(InsertOrderDTO dto);
     List<OrderHistoryResponse> getOrderHistoriesByMemberId(Long memberId);
+    void updateOrderStatusToCanceled(Long orderId);
 }
