@@ -44,8 +44,8 @@ public class ProductController {
             @RequestParam(value = "width",  required = false) Long width,
             @RequestParam(value = "depth",  required = false) Long depth,
             @RequestParam(value = "height",  required = false) Long height,
-            @RequestParam(value = "sort", defaultValue = "latest") String sort,
-            @RequestParam(value = "offset", defaultValue = "0") Long offset
+            @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+            @RequestParam(value = "offset", required = false, defaultValue = "0") Long offset
     ) {
         ProductResponse response = null;
 
