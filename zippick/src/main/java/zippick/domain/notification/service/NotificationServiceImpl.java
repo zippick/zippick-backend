@@ -42,8 +42,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public ReadNotificationResponse getNotifications(Long memberId, int offset) {
-        List<NotificationDto> list = notificationMapper.findNotificationsByMemberId(memberId, offset);
+    public ReadNotificationResponse getNotifications(Long memberId) {
+        List<NotificationDto> list = notificationMapper.findNotificationsByMemberId(memberId);
         return new ReadNotificationResponse(list);
     }
 
