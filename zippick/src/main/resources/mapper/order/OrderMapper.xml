@@ -16,7 +16,7 @@
             o.merchant_order_id AS merchantOrderId,
             o.status AS status,
             p.name AS productName,
-            pi.image_url AS productImageUrl
+            p.thumbnail_image_url AS productImageUrl
         FROM orders o
                  JOIN product p ON o.product_id = p.id
                  LEFT JOIN (
