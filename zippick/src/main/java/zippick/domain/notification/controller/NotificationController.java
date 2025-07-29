@@ -32,15 +32,14 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<ReadNotificationResponse> getNotifications(
-            HttpServletRequest request,
-            @RequestParam int offset) {
+            HttpServletRequest request) {
 
         Long memberId = (Long) request.getAttribute("memberId");
         if (memberId == null) {
             throw new IllegalStateException("memberId가 누락되었습니다.");
         }
 
-        ReadNotificationResponse response = notificationService.getNotifications(memberId, offset);
+        ReadNotificationResponse response = notificationService.getNotifications(memberId);
         return ResponseEntity.ok(response);
     }
 }
