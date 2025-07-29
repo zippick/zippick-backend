@@ -26,7 +26,7 @@ public class OrderController {
         orderService.insertOrder(dto, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @PostMapping("/cancle/{orderId}")
+    @PostMapping("/cancel/{orderId}")
     public ResponseEntity<Void> cancel(HttpServletRequest request, @PathVariable Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
