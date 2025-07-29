@@ -7,7 +7,7 @@ import zippick.domain.notification.dto.response.SendNotificationResponse;
 public interface NotificationService {
     SendNotificationResponse sendNotification(Long memberId, NotificationRequest request);
 
-    ReadNotificationResponse getNotifications(Long memberId, int offset);
+    ReadNotificationResponse getNotifications(Long memberId);
 
 }
 

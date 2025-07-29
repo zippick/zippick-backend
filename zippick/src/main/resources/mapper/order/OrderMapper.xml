@@ -12,6 +12,7 @@
   </insert>
     <select id="getOrderHistoriesByMemberId" resultType="zippick.domain.order.dto.response.OrderHistoryResponse">
         SELECT
+            o.id AS id,
             o.created_at AS createdAt,
             o.merchant_order_id AS merchantOrderId,
             o.status AS status,
