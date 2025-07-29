@@ -26,7 +26,6 @@
         FROM notification
         WHERE member_id = #{memberId}
         ORDER BY created_at DESC
-        OFFSET #{offset} ROWS FETCH NEXT 8 ROWS ONLY
     </select>
 
 </mapper>
