@@ -33,7 +33,7 @@ public class OrderController {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("detail/{orderId}")
+    @GetMapping("/detail/{orderId}")
     public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable Long orderId) {
         OrderDetailResponse response = orderService.getOrderDetail(orderId);
         return ResponseEntity.ok(response);
