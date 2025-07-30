@@ -92,12 +92,13 @@ public class ProductServiceImpl implements ProductService {
             input.put("prompt",
                     "Place the object from input_image_1 (" + category + ") naturally into the room shown in input_image_2.\n"
                             + "- Maintain the original room lighting, shadows, and colors\n"
-                            + "- Do NOT modify any existing furniture or background\n"
-                            + "- Position the object realistically on the room's floor plane\n"
+                            + "- Do NOT modify or remove any existing furniture or background in the room\n"
+                            + "- Position the object realistically on the floor or against a wall, as appropriate for its type\n"
+                            + "- Scale the object appropriately to match the real-world proportions of existing furniture and room structure\n"
                             + "- Match the object's perspective, angle, and orientation to the room\n"
-                            + "- Apply soft shadows consistent with room lighting direction\n"
-                            + "- Output should be a photorealistic composite of input_image_2 with the new object\n"
-                            + "- Do NOT include side-by-side or original images, only the final composition"
+                            + "- Apply soft and realistic shadows based on room lighting direction\n"
+                            + "- Final result must be a photorealistic composite of input_image_2 with the object inserted\n"
+                            + "- Do NOT include side-by-side or reference images, only the final composition"
             );
 
             input.put("input_image_1", furnitureImageUrl);
