@@ -89,17 +89,7 @@ public class ProductServiceImpl implements ProductService {
             String version = "6d14f9b3d25a9400c4a5e5f0f6842ae7537fefcf68df86dad9533f66204f2bb2";
 
             JSONObject input = new JSONObject();
-            String prompt = String.format(
-                    "Place the object from input_image_1 (\"%s\") naturally into the room shown in input_image_2.\n"
-                            + "- The object must be realistically positioned on the floor or against a wall, depending on its type\n"
-                            + "- Analyze existing furniture and architecture in the room to determine a suitable location and realistic scale\n"
-                            + "- Adjust the size of the object so it appears proportionate and consistent with surrounding furniture\n"
-                            + "- Align the perspective, angle, and orientation of the object to match the room’s camera view\n"
-                            + "- Maintain the original lighting and shadows of the room; cast soft and realistic shadows for the new object\n"
-                            + "- Do NOT remove or alter any existing furniture or decor\n"
-                            + "- Do NOT generate comparison or side-by-side images; only output a photorealistic single-frame result",
-                    category
-            );
+            String prompt = buildPromptForCategory(category);
             input.put("prompt", prompt);
 
             input.put("input_image_1", furnitureImageUrl);
@@ -368,5 +358,84 @@ public class ProductServiceImpl implements ProductService {
             default -> throw new ZippickException(ErrorCode.ILLEGAL_ARGUMENT);
         };
     }
+
+    private String buildPromptForCategory(String category) {
+        return switch (category.toLowerCase()) {
+            case "의자" -> """
+            Place the office chair (input_image_1) naturally into the room (input_image_2).
+
+            - Position the chair directly in front of or slightly to the side of a desk, resting on the floor
+            - Scale the chair to match the size and perspective of other nearby objects like the desk, monitor, or floor tiles
+            - Ensure the seat height is aligned with the desk height (typically 70–75 cm)
+            - The chair must not appear miniaturized or oversized; it should look suitable for a person to sit on
+            - Align the chair’s orientation and angle with the desk and floor plane
+            - Preserve existing room lighting and cast soft shadows from the same light source
+            - Do not modify or remove existing furniture; output a realistic composite only
+            """;
+
+            case "소파" -> """
+            Place the sofa (input_image_1) naturally into the room (input_image_2).
+
+            - Position the sofa along a wall or facing a visible focal point (like a TV or window)
+            - Analyze the room size and nearby furniture (e.g., coffee table, rug, wall height) to adjust the sofa’s size
+            - Scale the sofa to be large enough to seat one or more people, maintaining realistic proportions
+            - Match the sofa’s orientation with the wall or other seating elements
+            - Keep lighting, shadows, and material consistency with the rest of the room
+            - Do not alter any existing furniture in the room; return a single photorealistic image
+            """;
+
+            case "침대" -> """
+            Place the bed (input_image_1) naturally into the room (input_image_2).
+
+            - Position the bed against a wall or corner where it would typically fit based on room layout
+            - Scale the bed realistically by referencing the size of other objects in the room (e.g., windows, floor tiles, shelves)
+            - It must be large enough for a person to lie on (e.g., twin or queen size), not shrunken
+            - Match the bed’s base to the floor perspective and align the headboard with the wall
+            - Keep consistent lighting and shadows with the room’s light source
+            - Do not remove or obscure existing objects; return a seamless photorealistic composition
+            """;
+
+            case "옷장" -> """
+            Place the wardrobe (input_image_1) naturally into the room (input_image_2).
+
+            - Position the wardrobe standing against a vertical wall
+            - Scale it to match the height of doors, windows, or nearby cabinets
+            - The wardrobe should appear tall and upright, typically around 180–200 cm high
+            - Align its vertical edges to match the room’s perspective and lines
+            - Cast natural shadows onto the floor and wall consistent with the room’s lighting
+            - Ensure it does not overlap or replace existing furniture
+            """;
+
+            case "책상" -> """
+            Place the desk (input_image_1) naturally into the room (input_image_2).
+
+            - Position the desk against a wall or under a window, or aligned with other office elements
+            - Scale the desk to match standard height (around 72–75 cm) and similar proportions to existing desks/tables
+            - Align the top surface with surrounding elements like monitors, shelves, or sockets
+            - Maintain the desk’s perspective, depth, and shadow realism
+            - Do not alter room layout or remove existing items
+            """;
+
+            case "식탁" -> """
+            Place the dining table (input_image_1) naturally into the room (input_image_2).
+
+            - Position the table at the center of an open area or near the kitchen zone
+            - Scale it to seat 2–6 people based on available space and existing furniture
+            - Ensure its height aligns with standard dining tables (~70–75 cm) and chairs if present
+            - Use visual cues like surrounding chairs, cabinets, or floor layout to determine appropriate scale
+            - Maintain realistic shadowing and lighting integration
+            """;
+
+            default -> """
+            Place the furniture object (input_image_1) naturally into the room (input_image_2).
+
+            - Position the object logically based on its type (e.g., floor-standing, wall-mounted)
+            - Adjust the object’s size to match the spatial proportions and perspective of the room
+            - Ensure the object integrates well with existing furniture and does not appear out of scale
+            - Align lighting, angle, and shadows to make the result photorealistic
+            """;
+        };
+    }
+
 
 }
