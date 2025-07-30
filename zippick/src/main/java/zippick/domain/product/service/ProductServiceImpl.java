@@ -370,7 +370,11 @@ public class ProductServiceImpl implements ProductService {
             - The chair must not appear miniaturized or oversized; it should look suitable for a person to sit on
             - Align the chair’s orientation and angle with the desk and floor plane
             - Preserve existing room lighting and cast soft shadows from the same light source
-            - Do not modify or remove existing furniture; output a realistic composite only
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             case "소파" -> """
@@ -381,7 +385,11 @@ public class ProductServiceImpl implements ProductService {
             - Scale the sofa to be large enough to seat one or more people, maintaining realistic proportions
             - Match the sofa’s orientation with the wall or other seating elements
             - Keep lighting, shadows, and material consistency with the rest of the room
-            - Do not alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             case "침대" -> """
@@ -392,7 +400,12 @@ public class ProductServiceImpl implements ProductService {
             - It must be large enough for a person to lie on (e.g., twin or queen size), not shrunken
             - Match the bed’s base to the floor perspective and align the headboard with the wall
             - Keep consistent lighting and shadows with the room’s light source
-            - Do not remove or obscure existing objects; return a seamless photorealistic composition
+            - Do NOT remove or obscure existing objects; return a seamless photorealistic composition
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             case "옷장" -> """
@@ -404,6 +417,11 @@ public class ProductServiceImpl implements ProductService {
             - Align its vertical edges to match the room’s perspective and lines
             - Cast natural shadows onto the floor and wall consistent with the room’s lighting
             - Ensure it does not overlap or replace existing furniture
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             case "책상" -> """
@@ -413,7 +431,11 @@ public class ProductServiceImpl implements ProductService {
             - Scale the desk to match standard height (around 72–75 cm) and similar proportions to existing desks/tables
             - Align the top surface with surrounding elements like monitors, shelves, or sockets
             - Maintain the desk’s perspective, depth, and shadow realism
-            - Do not alter room layout or remove existing items
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             case "식탁" -> """
@@ -424,6 +446,11 @@ public class ProductServiceImpl implements ProductService {
             - Ensure its height aligns with standard dining tables (~70–75 cm) and chairs if present
             - Use visual cues like surrounding chairs, cabinets, or floor layout to determine appropriate scale
             - Maintain realistic shadowing and lighting integration
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
 
             default -> """
@@ -433,6 +460,11 @@ public class ProductServiceImpl implements ProductService {
             - Adjust the object’s size to match the spatial proportions and perspective of the room
             - Ensure the object integrates well with existing furniture and does not appear out of scale
             - Align lighting, angle, and shadows to make the result photorealistic
+            - Do NOT modify or remove existing furniture; output a realistic composite only
+            - Do NOT alter any existing furniture in the room; return a single photorealistic image
+            - Do NOT include the original object image as a separate element in the output
+            - Do NOT generate a side-by-side, collage, or comparison view
+            - The output must be a single photorealistic image with the object seamlessly integrated into the room
             """;
         };
     }
