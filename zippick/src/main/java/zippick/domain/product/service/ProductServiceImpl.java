@@ -89,17 +89,18 @@ public class ProductServiceImpl implements ProductService {
             String version = "6d14f9b3d25a9400c4a5e5f0f6842ae7537fefcf68df86dad9533f66204f2bb2";
 
             JSONObject input = new JSONObject();
-            input.put("prompt",
-                    "Place the object from input_image_1 (" + category + ") naturally into the room shown in input_image_2.\n"
-                            + "- Maintain the original room lighting, shadows, and colors\n"
-                            + "- Do NOT modify or remove any existing furniture or background in the room\n"
-                            + "- Position the object realistically on the floor or against a wall, as appropriate for its type\n"
-                            + "- Scale the object appropriately to match the real-world proportions of existing furniture and room structure\n"
-                            + "- Match the object's perspective, angle, and orientation to the room\n"
-                            + "- Apply soft and realistic shadows based on room lighting direction\n"
-                            + "- Final result must be a photorealistic composite of input_image_2 with the object inserted\n"
-                            + "- Do NOT include side-by-side or reference images, only the final composition"
+            String prompt = String.format(
+                    "Place the object from input_image_1 (\"%s\") naturally into the room shown in input_image_2.\n"
+                            + "- The object must be realistically positioned on the floor or against a wall, depending on its type\n"
+                            + "- Analyze existing furniture and architecture in the room to determine a suitable location and realistic scale\n"
+                            + "- Adjust the size of the object so it appears proportionate and consistent with surrounding furniture\n"
+                            + "- Align the perspective, angle, and orientation of the object to match the room’s camera view\n"
+                            + "- Maintain the original lighting and shadows of the room; cast soft and realistic shadows for the new object\n"
+                            + "- Do NOT remove or alter any existing furniture or decor\n"
+                            + "- Do NOT generate comparison or side-by-side images; only output a photorealistic single-frame result",
+                    category
             );
+            input.put("prompt", prompt);
 
             input.put("input_image_1", furnitureImageUrl);
             input.put("input_image_2", roomImageUrl);
