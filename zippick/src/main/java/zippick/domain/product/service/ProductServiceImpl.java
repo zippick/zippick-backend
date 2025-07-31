@@ -210,19 +210,25 @@ public class ProductServiceImpl implements ProductService {
 
             // 2. 프롬프트 구성
             String prompt = """
-            Please analyze the uploaded room image and respond **strictly** in the following JSON format without any explanation:
+            Please analyze the uploaded room image and respond strictly in the following JSON format without any explanation.
             
-            1. Three matching interior color palettes.
-               - Each palette must include:
-                 - "code" (hex color)
-                 - "name" in Korean
-                 - "toneCategory" selected from the list below:
-                   ["화이트/베이지", "그레이", "블루/네이비", "브라운/우드", "블랙"]
+            Use the following internal steps to determine the result:
             
-            2. Two most suitable style tags from the list below:
-               ["내추럴", "모던&시크", "빈티지&레트로", "클래식", "심플&미니멀"]
+            1. Color Palette Extraction
+               - Preprocess the image (brightness normalization, noise reduction).
+               - Use KMeans clustering (k=3~5) to extract dominant colors from the image.
+               - Convert extracted RGB values to HEX.
+               - Match each HEX color to the closest toneCategory from the following:
+                 ["화이트/베이지", "그레이", "블루/네이비", "브라운/우드", "블랙"]
+               - Assign a Korean color name based on predefined color dictionary.
             
-            Respond strictly in the following JSON format:
+            2. Style Tag Estimation
+               - Extract visual features using a CNN-based encoder (e.g., MobileNet or ResNet).
+               - Compare the embedding with predefined embeddings for each style tag:
+                 ["내추럴", "모던&시크", "빈티지&레트로", "클래식", "심플&미니멀"]
+               - Use cosine similarity to select the top 2 matching tags.
+            
+            Respond strictly in this format:
             
             {
               "palette": [
