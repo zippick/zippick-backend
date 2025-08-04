@@ -1,5 +1,7 @@
 package zippick.domain.auth.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,9 +11,6 @@ import zippick.domain.auth.dto.request.LoginRequest;
 import zippick.domain.auth.dto.response.LoginResponse;
 import zippick.domain.auth.mapper.AuthMapper;
 import zippick.domain.member.dto.MemberDTO;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

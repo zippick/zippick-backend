@@ -46,13 +46,5 @@ management:
     db:
       enabled: true
 
-# logging
-logging:
-  level:
-    root: INFO
-    org.springframework: INFO
-    zippick.domain.product.mapper: DEBUG
-    org.mybatis: DEBUG
-
 firebase:
   credentials: ${FIREBASE_CREDENTIAL_PATH}

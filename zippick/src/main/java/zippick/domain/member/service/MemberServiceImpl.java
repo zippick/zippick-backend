@@ -1,5 +1,6 @@
 package zippick.domain.member.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import zippick.domain.order.dto.response.OrderHistoryResponse;
 import zippick.domain.order.mapper.OrderMapper;
 import zippick.global.exception.ErrorCode;
 import zippick.global.exception.ZippickException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

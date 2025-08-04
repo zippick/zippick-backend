@@ -1,12 +1,11 @@
 package zippick.domain.product.mapper;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.ProductLikedDto;
 import zippick.domain.product.dto.response.ProductDetailResponse;
-import zippick.domain.product.dto.ProductDto;
-
-import java.util.List;
 
 @Mapper
 public interface ProductMapper {

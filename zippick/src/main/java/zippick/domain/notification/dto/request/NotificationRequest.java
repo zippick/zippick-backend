@@ -1,8 +1,8 @@
 package zippick.domain.notification.dto.request;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import java.time.LocalDateTime;
 
 @Builder
 @Getter
