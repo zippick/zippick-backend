@@ -2,7 +2,6 @@ package zippick.domain.product.service;
 
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
-import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.ProductLikedDto;
 import zippick.domain.product.dto.request.AiRecommendRequest;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;

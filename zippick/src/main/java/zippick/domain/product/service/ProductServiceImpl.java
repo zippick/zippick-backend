@@ -2,26 +2,26 @@ package zippick.domain.product.service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.ProductLikedDto;
 import zippick.domain.product.dto.request.AiRecommendRequest;
 import zippick.domain.product.dto.response.InteriorAnalysisResponse;
 import zippick.domain.product.dto.response.ProductDetailResponse;
-import zippick.domain.product.dto.ProductDto;
 import zippick.domain.product.dto.response.ProductResponse;
 import zippick.domain.product.mapper.ProductMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
-import org.json.JSONObject;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import zippick.global.exception.ErrorCode;
 import zippick.global.exception.ZippickException;
 import zippick.infra.file.s3.S3Uploader;
@@ -205,10 +205,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public InteriorAnalysisResponse analysisInteriorImage(MultipartFile roomImage) {
         try {
-            // 1. S3에 이미지 업로드
+            // S3에 이미지 업로드
             String imageUrl = s3Uploader.upload("ai-interior-rooms", roomImage);
 
-            // 2. 프롬프트 구성
+            // 프롬프트 구성
             String prompt = """
             Please analyze the uploaded room image and respond strictly in the following JSON format without any explanation.
             
@@ -242,7 +242,7 @@ public class ProductServiceImpl implements ProductService {
             Do not include any explanation or additional text.
             """;
 
-            // 3. HTTP 요청 준비 (Java HttpClient 사용)
+            // HTTP 요청 준비 (Java HttpClient 사용)
             HttpClient httpClient = HttpClient.newHttpClient();
 
             JSONObject imageNode = new JSONObject();
@@ -275,7 +275,7 @@ public class ProductServiceImpl implements ProductService {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                     .build();
 
-            // 4. 응답 처리
+            // 응답 처리
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
@@ -287,8 +287,6 @@ public class ProductServiceImpl implements ProductService {
                     .getJSONObject(0)
                     .getJSONObject("message")
                     .getString("content");
-
-            System.out.println("GPT 응답 원문:\n" + content);
 
             // 마크다운 제거
             String cleanedContent = content

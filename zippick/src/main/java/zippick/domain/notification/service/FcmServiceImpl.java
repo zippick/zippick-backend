@@ -3,9 +3,9 @@ package zippick.domain.notification.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import zippick.domain.notification.dto.FcmTokenDto;
 import zippick.domain.notification.dto.request.FcmTokenRequest;
 import zippick.domain.notification.mapper.FcmTokenMapper;
-import zippick.domain.notification.dto.FcmTokenDto;
 
 @Service
 @RequiredArgsConstructor

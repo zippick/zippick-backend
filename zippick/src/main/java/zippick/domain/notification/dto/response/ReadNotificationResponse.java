@@ -1,9 +1,8 @@
 package zippick.domain.notification.dto.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 import zippick.domain.notification.dto.NotificationDto;
 
 @Getter
